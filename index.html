@@ -5,141 +5,135 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>SUPERHUMAN</title>
   <style>
-    /* Reset & globals */
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    html, body { height: 100%; }
+    /* Reset and global */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    html, body {
+      height: 100%;
+    }
     body {
-      background: #1C1D22;
-      color: #fff;
-      font-family: Arial, sans-serif;
+      background-color: #1C1D22;
       display: flex;
       align-items: center;
       justify-content: center;
+      font-family: Arial, sans-serif;
+      color: #fff;
       padding: 20px;
     }
 
-    /* Layout */
+    /* Container */
     .container {
-      display: flex;
-      max-width: 1000px;
+      text-align: center;
+      max-width: 800px;
       width: 100%;
-      background: #252730;
-      border-radius: 8px;
-      overflow: hidden;
-    }
-    .content, .actions {
-      padding: 40px;
-      flex: 1;
-    }
-    .content {
-      text-align: left;
-    }
-    .actions {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      background: #1C1D22;
-    }
-    .divider {
-      width: 1px;
-      background: #3A3B44;
     }
 
     /* Logo */
+    .logo {
+      margin-bottom: 40px;
+    }
     .logo img {
       max-width: 300px;
       width: 100%;
       height: auto;
-      margin-bottom: 24px;
     }
 
     /* Description */
     .description {
-      font-size: 18px;
-      line-height: 1.5;
       margin-bottom: 40px;
+    }
+    .description p {
+      font-size: 18px;
+      line-height: 1.6;
+      margin-bottom: 20px;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* Divider */
+    .divider {
+      width: 60%;
+      height: 1px;
+      background-color: #444;
+      margin: 0 auto 40px;
+      border: none;
     }
 
     /* Store buttons */
     .store-buttons a {
-      display: block;
-      margin: 10px 0;
+      display: inline-block;
+      margin: 10px;
       text-decoration: none;
     }
     .store-buttons img {
-      height: 60px;
-      width: auto;
+      max-width: 250px;
+      width: 100%;
+      height: auto;
     }
 
     /* Footer */
     footer {
-      text-align: center;
+      margin-top: 60px;
       color: #777;
       font-size: 14px;
-      margin-top: 20px;
     }
 
-    /* Mobile */
-    @media (max-width: 768px) {
-      .container {
-        flex-direction: column;
-        text-align: center;
+    /* Responsive touches */
+    @media (max-width: 600px) {
+      .description p {
+        font-size: 16px;
       }
-      .content, .actions {
-        padding: 20px;
+      .store-buttons a {
+        display: block;
+        margin: 15px auto;
+      }
+      .store-buttons img {
+        max-width: 200px;
       }
       .divider {
-        display: none;
-      }
-      .content {
-        order: 1;
-      }
-      .actions {
-        order: 2;
+        width: 80%;
       }
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <!-- Left / Top on mobile -->
-    <div class="content">
-      <div class="logo">
-        <img src="https://905f029cafa7956116d8175221e7cbfb.cdn.bubble.io/f1740332548559x837838401271511900/stripe_full_logo.PNG" alt="Superhuman Logo">
-      </div>
-      <p class="description">
-        Superhuman is the next-gen social fitness platform—connect with inspiring creators, track your progress, and join a global community dedicated to growth.  
-      </p>
-      <!-- Optional: feature list -->
-      <!--
-      <ul>
-        <li>🏋️‍♂️ Track workouts effortlessly</li>
-        <li>🌟 Connect with inspiring creators</li>
-        <li>📊 Gain AI-driven insights</li>
-        <li>🎯 Set & smash personal goals</li>
-        <li>🌍 Join a global movement</li>
-      </ul>
-      -->
+    <!-- Logo -->
+    <div class="logo">
+      <img src="https://905f029cafa7956116d8175221e7cbfb.cdn.bubble.io/f1740332548559x837838401271511900/stripe_full_logo.PNG"
+           alt="Superhuman Logo">
     </div>
 
-    <div class="divider"></div>
-
-    <!-- Right / Bottom on mobile -->
-    <div class="actions">
-      <div class="store-buttons">
-        <a href="https://apps.apple.com/us/app/superhuman/id6458828132" title="Download on the App Store">
-          <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Download on the App Store">
-        </a>
-        <a href="https://play.google.com/store/apps/details?id=com.gPotQfsKvlwN.natively" title="Get it on Google Play">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Get it on Google Play">
-        </a>
-      </div>
+    <!-- Description -->
+    <div class="description">
+      <p>Superhuman is a social platform where people connect through shared passions, personal growth, and meaningful experiences. Every user can create a unique profile and share what matters most to them — whether it’s fitness, creativity, philosophy, or daily reflections.</p>
+      <p>Unlike traditional social networks, Superhuman isn’t limited to one type of content. It’s a space built around authenticity and evolving identity, where expression is encouraged in many forms — from photos and videos to thoughts, routines, and beyond.</p>
+      <p>At its core, Superhuman is about becoming who you are — and sharing that journey with others.</p>
     </div>
+
+    <!-- Divider -->
+    <hr class="divider">
+
+    <!-- Store Buttons -->
+    <div class="store-buttons">
+      <a href="https://apps.apple.com/us/app/superhuman/id6458828132" title="Download on the App Store">
+        <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg"
+             alt="Download on the App Store">
+      </a>
+      <a href="https://play.google.com/store/apps/details?id=com.gPotQfsKvlwN.natively" title="Get it on Google Play">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg"
+             alt="Get it on Google Play">
+      </a>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      &copy; 2025 Superhuman LLC. All rights reserved.
+    </footer>
   </div>
-
-  <footer>
-    &copy; 2025 Superhuman LLC. All rights reserved.
-  </footer>
 </body>
 </html>
