@@ -50,8 +50,7 @@
       line-height: 1.6;
       margin-bottom: 20px;
       max-width: 700px;
-      margin-left: auto;
-      margin-right: auto;
+      margin: 0 auto 20px;
     }
 
     /* Divider */
@@ -69,10 +68,10 @@
       margin: 10px;
       text-decoration: none;
     }
+    /* <-- updated: force equal height -->
     .store-buttons img {
-      max-width: 250px;
-      width: 100%;
-      height: auto;
+      height: 60px;
+      width: auto;
     }
 
     /* Footer */
@@ -82,20 +81,17 @@
       font-size: 14px;
     }
 
-    /* Responsive touches */
+    /* Responsive tweaks */
     @media (max-width: 600px) {
       .description p {
         font-size: 16px;
       }
-      .store-buttons a {
-        display: block;
-        margin: 15px auto;
-      }
-      .store-buttons img {
-        max-width: 200px;
-      }
       .divider {
         width: 80%;
+      }
+      /* slightly smaller badges on mobile */
+      .store-buttons img {
+        height: 50px;
       }
     }
   </style>
