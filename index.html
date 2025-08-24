@@ -1,141 +1,402 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>SUPERHUMAN</title>
-
-  <!-- Montserrat 700 -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
-
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Superhuman — Level Up in Real Life</title>
   <style>
-    /* Reset and global */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    html, body {
-      height: 100%;
-    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
     body {
-      background-color: #1C1D22;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: Arial, sans-serif;
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
       color: #fff;
-      padding: 20px;
+      background: #0b0b12;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    :root{
+      --bg: #0b0b12;
+      --glass: rgba(255,255,255,0.05);
+      --glass-border: rgba(255,255,255,0.10);
+      --muted: rgba(255,255,255,0.70);
+      --muted-2: rgba(255,255,255,0.60);
+      --green:   #4ade80;
     }
 
-    /* Container */
-    .container {
-      text-align: center;
-      max-width: 800px;
-      width: 100%;
+    /* Background glow */
+    .glow-wrap { pointer-events:none; position:fixed; inset:0; z-index:-1; opacity:.30; }
+    .glow-a, .glow-b { position:absolute; border-radius:9999px; filter:blur(64px); animation:pulse 4s ease-in-out infinite; }
+    .glow-a { left:-33%; top:25%; width:80rem; height:80rem; background:#d946ef; }
+    .glow-b { right:-20%; bottom:-10%; width:90rem; height:90rem; background:#6366f1; animation-delay:.6s; }
+    @keyframes pulse { 0%,100%{opacity:.85;transform:scale(1)} 50%{opacity:.55;transform:scale(1.03)} }
+
+    .container { max-width:72rem; margin-inline:auto; padding-inline:1rem; }
+
+    .hero { text-align:center; padding:.75rem 0 1.5rem; }
+    .title { font-weight:900; letter-spacing:-0.02em; font-size:clamp(2.25rem,6vw,4rem); line-height:1.05; margin-bottom:.5rem; }
+    .gradient { background:linear-gradient(90deg,#f472b6,#a78bfa); -webkit-background-clip:text; background-clip:text; color:transparent; }
+    .subtitle {
+      margin:0 auto;
+      font-size:clamp(1rem,2.2vw,1.35rem);
+      font-weight:600;
+      letter-spacing:.015em;
+      max-width:30rem;
+      line-height:1.5;
+      text-align:center;
+      background:linear-gradient(90deg,#d1d5db,#8b5cf6);
+      -webkit-background-clip:text; background-clip:text; color:transparent;
     }
 
-    /* Logo */
-    .logo {
-      margin-bottom: 40px;
+    /* CTA Buttons */
+    .cta-buttons { margin-top:2rem; display:flex; justify-content:center; gap:1rem; flex-wrap:wrap; }
+    .get-app-btn {
+      padding:.75rem 1.75rem; font-size:1.1rem; font-weight:700; border-radius:.75rem;
+      background:linear-gradient(90deg,#f472b6,#a78bfa); color:#2d1b69; text-decoration:none;
+      transition:transform .15s ease, box-shadow .15s ease;
     }
-    .logo-text {
-      font-family: 'Montserrat', sans-serif;
-      font-weight: 700;
-      font-size: 32px;
-      text-transform: uppercase;
-      /* you can tweak size here if you want it larger/smaller */
+    .get-app-btn:hover { transform:translateY(-2px); box-shadow:0 4px 12px rgba(0,0,0,.25); }
+    .watch-video-btn {
+      padding:.75rem 1.5rem; font-size:1.1rem; font-weight:600; border-radius:.75rem;
+      background:rgba(255,255,255,.05); border:1px solid var(--glass-border); backdrop-filter:blur(10px);
+      color:#fff; text-decoration:none; transition:background .15s ease, transform .15s ease;
     }
+    .watch-video-btn:hover { background:rgba(255,255,255,.08); transform:translateY(-2px); }
 
-    /* Description */
-    .description {
-      margin-bottom: 40px;
-    }
-    .description p {
-      font-size: 18px;
-      line-height: 1.6;
-      margin-bottom: 20px;
-      max-width: 700px;
-      margin: 0 auto 20px;
-    }
+    main { padding:3rem 0; width:100%; }
+    main .container { padding-inline:2rem; }
+    @media (min-width:1024px){ main .container { padding-inline:3rem; } }
 
-    /* Divider */
-    .divider {
-      width: 60%;
-      height: 1px;
-      background-color: #444;
-      margin: 0 auto 40px;
-      border: none;
-    }
+    .card { background:var(--glass); border:1px solid var(--glass-border); border-radius:1rem; padding:0; backdrop-filter:blur(12px); overflow:hidden; }
 
-    /* Store buttons */
-    .store-buttons a {
-      display: inline-block;
-      margin: 10px;
-      text-decoration: none;
-    }
+    /* Carousel */
+    .carousel { position:relative; }
+    .carousel-viewport { overflow:hidden; width:100%; touch-action:pan-y; }
+    .carousel-track { display:flex; will-change:transform; transition:transform 350ms ease; }
+    .slide { position:relative; min-width:100%; padding:2.5rem; isolation:isolate; }
 
-    .store-buttons img {
-      height: 57px;
-      width: auto;
-    }
+    .card-inner { position:relative; display:flex; gap:2rem; align-items:center; justify-content:space-between; z-index:1; }
+    @media (max-width:640px){ .card-inner { gap:1.25rem; } }
 
-    footer {
-      margin-top: 60px;
-      color: #777;
-      font-size: 14px;
-    }
+    .live-badge { display:inline-flex; align-items:center; gap:.4rem; font-weight:600; font-size:.85rem; color:var(--green); padding:0; }
+    .live-dot { width:.6rem; height:.6rem; border-radius:50%; background:var(--green); box-shadow:0 0 6px var(--green); animation:dotPulse 1.2s ease-in-out infinite; }
+    @keyframes dotPulse { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(1.4);opacity:.6} }
 
-    /* Responsive tweaks */
-    @media (max-width: 600px) {
-      .description p {
-        font-size: 16px;
-      }
-      .divider {
-        width: 80%;
-      }
-      /* slightly smaller badges on mobile */
-      .store-buttons img {
-        height: 50px;
-      }
+    .h3 { margin:0; font-size:1.375rem; font-weight:700; }
+    .big-number { margin:.25rem 0 0; font-size:1.875rem; font-weight:800; letter-spacing:-.02em; background:linear-gradient(90deg,#f472b6,#a78bfa); -webkit-background-clip:text; background-clip:text; color:transparent; }
+    .muted { color:var(--muted-2); font-size:1rem; margin:0; }
+
+    .meter { position:relative; width:2.25rem; height:18rem; border-radius:9999px; background:rgba(255,255,255,.08); box-shadow:inset 0 2px 6px rgba(0,0,0,.25); overflow:hidden; flex-shrink:0; }
+    .meter-fill { position:absolute; left:0; bottom:0; width:100%; background:linear-gradient(180deg,#6366f1 0%, #a855f7 60%, #ec4899 100%); height:0%; }
+
+    .bg-spark { position:absolute; inset:0; z-index:0; opacity:.18; filter:blur(.5px); pointer-events:none; }
+    .bg-spark svg { width:100%; height:100%; display:block; }
+    .bg-spark::after { content:""; position:absolute; inset:0; background:linear-gradient(to bottom, rgba(11,11,18,.35), transparent 20%, transparent 80%, rgba(11,11,18,.35)); pointer-events:none; }
+
+    .dots { display:flex; justify-content:center; gap:.5rem; padding:0 0 1rem; margin-top:.25rem; }
+    .dot { width:8px; height:8px; border-radius:50%; background:rgba(255,255,255,.35); border:0; cursor:pointer; }
+    .dot[aria-current="true"] { background:#fff; }
+
+    footer { padding:1.75rem 0 2rem; text-align:center; }
+    .brand { font-weight:800; letter-spacing:.02em; font-size:clamp(1.25rem,2vw,1.5rem); }
+    .copyright { margin-top:.75rem; color:rgba(255,255,255,.40); font-size:.75rem; }
+
+    .rating-stars { display:flex; gap:.35rem; line-height:1; }
+    .rating-stars svg { width:24px; height:24px; display:block; filter:drop-shadow(0 0 2px rgba(0,0,0,.5)); }
+
+    /* Skeleton */
+    .skeleton { position:relative; display:inline-block; color:transparent!important; background:rgba(255,255,255,.08); border-radius:.5rem; overflow:hidden; }
+    .skeleton::after { content:""; position:absolute; inset:0; transform:translateX(-100%); background:linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,.18) 50%, rgba(255,255,255,0) 100%); animation:shimmer 1.2s infinite; }
+    @keyframes shimmer { 100% { transform:translateX(100%); } }
+    .s-number { min-width:8ch; min-height:1.8rem; }
+    .s-small  { min-width:6ch; min-height:1.2rem; }
+
+    /* ---- Store chooser modal (fallback) ---- */
+    .modal-backdrop {
+      position: fixed; inset: 0; background: rgba(0,0,0,.5);
+      display: none; align-items: center; justify-content: center; z-index: 50;
     }
+    .modal {
+      background: var(--glass); border: 1px solid var(--glass-border); backdrop-filter: blur(12px);
+      border-radius: 1rem; padding: 1.25rem; width: min(92vw, 420px);
+    }
+    .modal h3 { margin: 0 0 .75rem; font-size: 1.15rem; }
+    .modal .row { display: flex; gap: .75rem; flex-wrap: wrap; margin-top: .5rem; }
+    .btn {
+      appearance: none; border: 0; cursor: pointer; border-radius: .75rem; font-weight: 700;
+      padding: .7rem 1rem;
+    }
+    .btn-store { background: linear-gradient(90deg, #f472b6, #a78bfa); color: #2d1b69; }
+    .btn-ghost { background: rgba(255,255,255,.06); color: #fff; border: 1px solid var(--glass-border); }
   </style>
 </head>
 <body>
-  <div class="container">
-    <!-- Logo -->
-    <div class="logo">
-      <div class="logo-text">SUPERHUMAN</div>
-    </div>
-
-    <!-- Description -->
-    <div class="description">
-      <p>Superhuman is a social platform where people connect through shared passions, personal growth, and meaningful experiences. Every user can create a unique profile and share what matters most to them — whether it’s fitness, creativity, philosophy, or daily reflections.</p>
-      <p>Unlike traditional social networks, Superhuman isn’t limited to one type of content. It’s a space built around authenticity and evolving identity, where expression is encouraged in many forms — from photos and videos to thoughts, routines, and beyond.</p>
-      <p>At its core, Superhuman is about becoming who you are — and sharing that journey with others.</p>
-    </div>
-
-    <!-- Divider -->
-    <hr class="divider">
-
-    <!-- Store Buttons -->
-    <div class="store-buttons">
-      <a href="https://apps.apple.com/us/app/superhuman/id6458828132" title="Download on the App Store">
-        <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg"
-             alt="Download on the App Store">
-      </a>
-      <a href="https://play.google.com/store/apps/details?id=com.gPotQfsKvlwN.natively" title="Get it on Google Play">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg"
-             alt="Get it on Google Play">
-      </a>
-    </div>
-
-    <!-- Footer -->
-    <footer>
-      &copy; 2025 Superhuman LLC. All rights reserved.
-    </footer>
+  <div class="glow-wrap" aria-hidden="true">
+    <div class="glow-a"></div>
+    <div class="glow-b"></div>
   </div>
+
+  <header>
+    <div class="container">
+      <div class="hero">
+        <h1 class="title"><span class="gradient">LEVEL UP</span> in Real Life</h1>
+        <p class="subtitle">Become the greatest version of you.</p>
+
+        <div class="cta-buttons">
+          <a id="getAppBtn" class="get-app-btn" href="#">Get the App</a>
+          <a class="watch-video-btn" href="#">Watch the Video</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <!-- Carousel Card -->
+      <section class="card">
+        <div class="carousel" aria-roledescription="carousel">
+          <div class="carousel-viewport" id="statsCarousel" tabindex="0" aria-label="Community stats">
+            <div class="carousel-track" role="group" aria-live="polite">
+              
+              <!-- Slide 1: Activities Completed -->
+              <div class="slide" role="group" aria-roledescription="slide" aria-label="1 of 3">
+                <div class="card-inner">
+                  <div class="stack" style="display:flex;flex-direction:column;gap:.5rem">
+                    <span class="live-badge"><span class="live-dot"></span> Live</span>
+                    <h2 class="h3">Activities Completed</h2>
+                    <p id="activitiesLine" class="big-number skeleton s-number">00000 / 000k</p>
+                    <p id="activitiesPct" class="muted skeleton s-small">—% of community goal</p>
+                  </div>
+                  <div class="meter" aria-hidden="true">
+                    <div id="meterFill" class="meter-fill" style="height:0%"></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Slide 2: Active Users with full-card background sparkline -->
+              <div class="slide" role="group" aria-roledescription="slide" aria-label="2 of 3">
+                <div class="bg-spark" aria-hidden="true">
+                  <svg viewBox="0 0 1200 400" preserveAspectRatio="none">
+                    <defs>
+                      <linearGradient id="spark-g" x1="0" y1="0" x2="1" y2="0">
+                        <stop offset="0%" stop-color="#6366f1"/>
+                        <stop offset="60%" stop-color="#a855f7"/>
+                        <stop offset="100%" stop-color="#ec4899"/>
+                      </linearGradient>
+                      <filter id="spark-glow" x="-10%" y="-10%" width="120%" height="120%">
+                        <feGaussianBlur stdDeviation="2" result="blur"/>
+                        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                      </filter>
+                    </defs>
+                    <g opacity="0.18">
+                      <path d="M0 340 H1200 M0 280 H1200 M0 220 H1200 M0 160 H1200 M0 100 H1200" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+                    </g>
+                    <polyline 
+                      points="0,340 60,334 120,328 180,320 240,310 300,300 360,284 420,296 480,270 540,286 600,250 660,272 720,230 780,260 840,214 900,248 960,198 1020,236 1080,188 1140,220 1200,200"
+                      fill="none" stroke="url(#spark-g)" stroke-width="3" filter="url(#spark-glow)"/>
+                  </svg>
+                </div>
+
+                <div class="card-inner">
+                  <div class="stack" style="display:flex;flex-direction:column;gap:.5rem">
+                    <span class="live-badge"><span class="live-dot"></span> Live</span>
+                    <h2 class="h3">Active Users</h2>
+                    <p id="usersNumber" class="big-number skeleton s-number">0000</p>
+                    <p class="muted">Last 30 days</p>
+                  </div>
+                  <div style="width:2.25rem;height:18rem;flex-shrink:0"></div>
+                </div>
+              </div>
+
+              <!-- Slide 3: App Store Rating -->
+              <div class="slide" role="group" aria-roledescription="slide" aria-label="3 of 3">
+                <div class="card-inner">
+                  <div class="stack" style="display:flex;flex-direction:column;gap:.6rem">
+                    <span class="live-badge"><span class="live-dot"></span> Live</span>
+                    <h2 class="h3">App Store Rating</h2>
+                    <p class="big-number" aria-label="App Store rating 5 out of 5">4.9 / 5</p>
+                    <div class="rating-stars" role="img" aria-label="5 stars">
+                      <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#FFD166" d="M12 2l2.92 6.1 6.73.98-4.86 4.73 1.15 6.7L12 17.77 6.06 20.5l1.15-6.7L2.35 9.08l6.73-.98z"/></svg>
+                      <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#FFD166" d="M12 2l2.92 6.1 6.73.98-4.86 4.73 1.15 6.7L12 17.77 6.06 20.5l1.15-6.7L2.35 9.08l6.73-.98z"/></svg>
+                      <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#FFD166" d="M12 2l2.92 6.1 6.73.98-4.86 4.73 1.15 6.7L12 17.77 6.06 20.5l1.15-6.7L2.35 9.08l6.73-.98z"/></svg>
+                      <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#FFD166" d="M12 2l2.92 6.1 6.73.98-4.86 4.73 1.15 6.7L12 17.77 6.06 20.5l1.15-6.7L2.35 9.08l6.73-.98z"/></svg>
+                      <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#FFD166" d="M12 2l2.92 6.1 6.73.98-4.86 4.73 1.15 6.7L12 17.77 6.06 20.5l1.15-6.7L2.35 9.08l6.73-.98z"/></svg>
+                    </div>
+                    <p class="muted">Based on 54 reviews</p>
+                  </div>
+                  <div style="width:2.25rem;height:18rem;flex-shrink:0"></div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="dots" aria-label="Slide navigation">
+            <button class="dot" data-index="0" aria-current="true" aria-label="Go to slide 1"></button>
+            <button class="dot" data-index="1" aria-label="Go to slide 2"></button>
+            <button class="dot" data-index="2" aria-label="Go to slide 3"></button>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="brand">SUPERHUMAN</div>
+      <div class="copyright">© 2025 Superhuman</div>
+    </div>
+  </footer>
+
+  <!-- Store chooser (shown on desktop/unknown) -->
+  <div id="storeChooser" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="storeChooserTitle">
+    <div class="modal">
+      <h3 id="storeChooserTitle">Choose your app store</h3>
+      <div class="row">
+        <a class="btn btn-store" href="https://apps.apple.com/us/app/superhuman/id6458828132">Apple App Store</a>
+        <a class="btn btn-store" href="https://play.google.com/store/apps/details?id=com.gPotQfsKvlwN.natively">Google Play</a>
+        <button id="closeChooser" class="btn btn-ghost" type="button">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  (function(){
+    /* ------------------ Carousel (unchanged) ------------------ */
+    var viewport = document.getElementById('statsCarousel');
+    var track = viewport.querySelector('.carousel-track');
+    var slides = Array.prototype.slice.call(track.children);
+    var dots = Array.prototype.slice.call(document.querySelectorAll('.dot'));
+
+    var index = 0, startX = 0, currentX = 0, isDragging = false, trackX = 0;
+    function clamp(v,min,max){ return Math.min(max, Math.max(min, v)); }
+    function applyTransform(px){ track.style.transform = 'translateX('+px+'px)'; track.style.webkitTransform = 'translateX('+px+'px)'; }
+    function update(){ track.style.transition='transform 350ms ease'; track.style.webkitTransition='transform 350ms ease'; applyTransform(-index*viewport.clientWidth); for(var i=0;i<dots.length;i++){dots[i].setAttribute('aria-current', i===index?'true':'false');}}
+    function jump(dx){ track.style.transition='none'; track.style.webkitTransition='none'; applyTransform(trackX + dx); }
+    function snap(dx){ var th = viewport.clientWidth*0.18; if(dx<-th && index<slides.length-1) index++; if(dx>th && index>0) index--; update(); resetAuto(); }
+
+    if (typeof ResizeObserver!=='undefined'){ new ResizeObserver(function(){ track.style.transition='none'; track.style.webkitTransition='none'; applyTransform(-index*viewport.clientWidth); }).observe(viewport); }
+    else { window.addEventListener('resize', function(){ track.style.transition='none'; track.style.webkitTransition='none'; applyTransform(-index*viewport.clientWidth); }); }
+
+    viewport.addEventListener('mousedown', function(e){ isDragging=true; startX=e.clientX; trackX=-index*viewport.clientWidth; viewport.style.cursor='grabbing'; });
+    window.addEventListener('mousemove', function(e){ if(!isDragging) return; currentX=e.clientX; jump(currentX-startX); });
+    window.addEventListener('mouseup', function(e){ if(!isDragging) return; isDragging=false; viewport.style.cursor=''; snap((e.clientX||startX)-startX); });
+    viewport.addEventListener('touchstart', function(e){ var t=e.touches[0]; isDragging=true; startX=t.clientX; trackX=-index*viewport.clientWidth; }, {passive:true});
+    viewport.addEventListener('touchmove', function(e){ if(!isDragging) return; var t=e.touches[0]; jump(t.clientX-startX); }, {passive:true});
+    viewport.addEventListener('touchend', function(e){ if(!isDragging) return; isDragging=false; var c=(e.changedTouches&&e.changedTouches[0])?e.changedTouches[0].clientX:startX; snap(c-startX); });
+
+    viewport.addEventListener('keydown', function(e){ var k=e.key||e.keyCode; if(k==='ArrowRight'||k===39){ index=clamp(index+1,0,slides.length-1); update(); resetAuto(); } if(k==='ArrowLeft'||k===37){ index=clamp(index-1,0,slides.length-1); update(); resetAuto(); }});
+    for (var d=0; d<dots.length; d++){ (function(btn){ btn.addEventListener('click', function(){ index=Number(btn.getAttribute('data-index'))||0; update(); resetAuto(); }); })(dots[d]); }
+    var timer; function startAuto(){ stopAuto(); timer=setInterval(function(){ index=(index+1)%slides.length; update(); }, 5000); } function stopAuto(){ if(timer){ clearInterval(timer); timer=null; } } function resetAuto(){ startAuto(); }
+    update(); startAuto();
+
+    /* ------------------ Metrics Fetch (unchanged) ------------------ */
+    var API_URL='https://superh.app/api/1.1/wf/get-landing-page-metrics';
+    var elActivitiesLine=document.getElementById('activitiesLine');
+    var elActivitiesPct=document.getElementById('activitiesPct');
+    var elMeterFill=document.getElementById('meterFill');
+    var elUsersNumber=document.getElementById('usersNumber');
+    function addSk(el){ if(el && el.className.indexOf('skeleton')===-1) el.className+=' skeleton'; }
+    function rmSk(el){ if(!el) return; el.className = el.className.replace(/\bskeleton\b/g,'').trim(); }
+    function formatK(n){ if(n>=100000) return Math.round(n/1000)+'k'; return (n.toLocaleString?n.toLocaleString():String(n)); }
+    function next50k(n){ if(n<=0) return 50000; return Math.ceil(n/50000)*50000; }
+    function setActivities(a){ var g=next50k(a); var pct=g?Math.max(0,Math.min(100,Math.round((a/g)*100))):0; if(elActivitiesLine){ elActivitiesLine.textContent=formatK(a)+' / '+(g>=100000?(g/1000)+'k':formatK(g)); rmSk(elActivitiesLine);} if(elActivitiesPct){ elActivitiesPct.textContent=pct+'% of community goal'; rmSk(elActivitiesPct);} if(elMeterFill){ elMeterFill.style.height=pct+'%'; } }
+    function setUsers(u){ if(elUsersNumber){ elUsersNumber.textContent=formatK(u); rmSk(elUsersNumber);} }
+    function xhrGet(url, cb){ try{ var x=new XMLHttpRequest(); x.open('GET',url,true); x.onreadystatechange=function(){ if(x.readyState===4){ if(x.status>=200&&x.status<300){ try{ cb(null, JSON.parse(x.responseText)); }catch(e){ cb(e); } } else { cb(new Error('HTTP '+x.status)); } } }; x.send(); }catch(e){ cb(e); } }
+    function fetchWithTimeout(url, ms, cb){
+      var done=false, t=setTimeout(function(){ if(done) return; done=true; cb(new Error('timeout')); }, ms);
+      if(typeof fetch==='function'){
+        var controller=null; try{ controller=new AbortController(); }catch(e){}
+        var opts=controller?{signal:controller.signal}:{};
+        fetch(url,opts).then(function(r){ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
+        .then(function(j){ if(done) return; done=true; clearTimeout(t); cb(null,j); })
+        .catch(function(){ if(controller&&controller.abort) try{controller.abort()}catch(e){} if(done) return;
+          xhrGet(url, function(err, j){ if(done) return; done=true; clearTimeout(t); cb(err,j); });
+        });
+      } else {
+        xhrGet(url, function(err, j){ if(done) return; done=true; clearTimeout(t); cb(err,j); });
+      }
+    }
+    addSk(elActivitiesLine); addSk(elActivitiesPct); addSk(elUsersNumber);
+    window.addEventListener('load', function(){ setTimeout(function(){ fetchWithTimeout(API_URL,8000,function(err,json){ if(err||!json||!json.response){ setActivities(0); setUsers(0); return; } var r=json.response||{}; setActivities(Number(r.activities_completed||0)); setUsers(Number(r.active_users||0)); }); },0); });
+
+    /* ------------------ Store Detection & Routing ------------------ */
+    var APPLE_URL = 'https://apps.apple.com/us/app/superhuman/id6458828132';
+    var ANDROID_URL = 'https://play.google.com/store/apps/details?id=com.gPotQfsKvlwN.natively';
+
+    function isAndroid(ua){
+      ua = ua || navigator.userAgent || '';
+      return /Android|Adr|Silk|Kindle|KF[A-Z]+/i.test(ua);
+    }
+    function isIOSLike(ua){
+      ua = ua || navigator.userAgent || '';
+      // iPhone / iPod / iPad (pre iPadOS 13)
+      if (/(iPhone|iPod|iPad)/i.test(ua)) return true;
+      // iPadOS 13+: reports as Macintosh; check touch capability
+      var isMac = /Macintosh/i.test(ua);
+      var touch = typeof navigator !== 'undefined' && navigator.maxTouchPoints && navigator.maxTouchPoints > 1;
+      return isMac && touch;
+    }
+    function fromUAData(){
+      // Optional: NavigatorUAData can hint platform on modern Chrome/Edge
+      var d = (navigator.userAgentData || navigator.userAgent || null);
+      if (!navigator.userAgentData) return null;
+      try {
+        var p = navigator.userAgentData.platform || '';
+        if (/Android/i.test(p)) return 'android';
+        if (/iOS|iPadOS|macOS/i.test(p)) return 'apple'; // iPadOS sometimes not exposed; macOS still routes to App Store page fine
+      } catch(e){}
+      return null;
+    }
+    function getPlatform(){
+      // Order: userAgentData hint -> classic UA tests
+      var hint = fromUAData();
+      if (hint === 'android') return 'android';
+      if (hint === 'apple')  return 'apple';
+      // Fallback heuristics
+      if (isAndroid()) return 'android';
+      if (isIOSLike()) return 'apple';
+      // Unknown (Windows/Linux/desktop w/o touch)
+      return 'unknown';
+    }
+
+    function openStore(platform){
+      var url = (platform === 'android') ? ANDROID_URL : (platform === 'apple') ? APPLE_URL : null;
+      if (url){
+        // Use replace() to avoid keeping the landing page in history when deep-linking
+        window.location.replace(url);
+      } else {
+        // show chooser
+        var backdrop = document.getElementById('storeChooser');
+        if (backdrop){ backdrop.style.display = 'flex'; }
+      }
+    }
+
+    var getBtn = document.getElementById('getAppBtn');
+    if (getBtn){
+      getBtn.addEventListener('click', function(e){
+        e.preventDefault();
+        var platform = getPlatform();
+        openStore(platform);
+      });
+    }
+
+    // Modal close button
+    var closeBtn = document.getElementById('closeChooser');
+    if (closeBtn){
+      closeBtn.addEventListener('click', function(){
+        var backdrop = document.getElementById('storeChooser');
+        if (backdrop){ backdrop.style.display = 'none'; }
+      });
+    }
+
+  })();
+  </script>
 </body>
 </html>
